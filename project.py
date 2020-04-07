@@ -16,13 +16,13 @@ def to_record(row, prev_day, key):
     return record
 
 
-def transform_data(file_name):
+def project_data(file_name, num_days):
     data = pd.read_csv(file_name + ".csv")
     data['date'] = pd.to_datetime(data['date'])
     new_data = []
     prev_day_by_fips = {}
 
-    for index, row in data.iterrows():
+    for index, row in reversed(data.iterrows()):
         fips = row['fips']
         prev_day = prev_day_by_fips.get(fips)
         if prev_day is None:
@@ -37,4 +37,4 @@ def transform_data(file_name):
     df.to_csv(file_name + "-normalized.csv", index=False, header=True)
 
 
-transform_data('us-states')
+project_data('us-states', num_days)
